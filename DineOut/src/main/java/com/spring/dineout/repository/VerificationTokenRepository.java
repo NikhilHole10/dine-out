@@ -9,4 +9,6 @@ import com.spring.dineout.model.VerificationToken;
 
 @Repository
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
+
+	Optional<VerificationToken> findByToken(String token);
 }

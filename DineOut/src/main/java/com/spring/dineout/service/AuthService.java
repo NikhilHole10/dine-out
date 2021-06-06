@@ -1,6 +1,7 @@
 package com.spring.dineout.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.dineout.dto.UserRegisterRequest;
+import com.spring.dineout.exception.DineOutException;
 import com.spring.dineout.model.NotificationEmail;
 import com.spring.dineout.model.User;
 import com.spring.dineout.model.VerificationToken;
@@ -60,6 +62,19 @@ public class AuthService {
 		verificationTokenRepository.save(vt);		
 		return verificationToken;
 		
+	}
+
+	public void verifyAccount(String token) {
+		Optional<VerificationToken> verificationToken =  verificationTokenRepository.findByToken(token);
+		verificationToken.orElseThrow(()->new DineOutException("Token not found"));
+		fetchUserAndEnable(verificationToken.get());
+	}
+
+	private void fetchUserAndEnable(VerificationToken verificationToken) {
+		String username = verificationToken.getUser().getEmail();
+		User user = userRepository.findByEmail(username).orElseThrow(()->new DineOutException("User with username"+username+ " does not exist"));
+		user.setAccount_status(true);
+		userRepository.save(user);
 	}
 	
 	
