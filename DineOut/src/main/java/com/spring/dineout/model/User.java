@@ -46,7 +46,7 @@ public class User implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return name;
+		return email;
 	}
 	@Override
 	public boolean isAccountNonExpired() {
