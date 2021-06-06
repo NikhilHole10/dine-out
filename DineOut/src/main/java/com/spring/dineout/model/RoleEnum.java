@@ -1,6 +1,6 @@
 package com.spring.dineout.model;
 
-public enum Role_Enum {
+public enum RoleEnum {
 	ROLE_USER,
 	ROLE_RESTOADMIN,
 	ROLE_ADMIN
