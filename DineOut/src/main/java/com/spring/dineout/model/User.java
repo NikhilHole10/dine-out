@@ -2,6 +2,7 @@ package com.spring.dineout.model;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
@@ -31,11 +33,11 @@ public class User implements UserDetails {
 	private Instant createdDate;
 	private boolean account_status;
 	private boolean isDeleted;
-	private Role_Enum role_Enum;
+	private RoleEnum roleEnum;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		 SimpleGrantedAuthority authority =  new SimpleGrantedAuthority(roleEnum.name());
+			return Collections.singleton(authority);
 	}
 	@Override
 	public String getUsername() {
@@ -63,7 +65,7 @@ public class User implements UserDetails {
 		return account_status;
 	}
 	public User(String name, String email, String contact_no, String password, String city, Instant createdDate,
-			boolean account_status, boolean isDeleted, Role_Enum role_Enum) {
+			boolean account_status, boolean isDeleted, String role_Enum) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -73,7 +75,7 @@ public class User implements UserDetails {
 		this.createdDate = createdDate;
 		this.account_status = account_status;
 		this.isDeleted = isDeleted;
-		this.role_Enum = role_Enum;
+		this.roleEnum = RoleEnum.valueOf(role_Enum);
 	}
 	
 }
