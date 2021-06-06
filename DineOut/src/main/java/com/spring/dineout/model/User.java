@@ -2,6 +2,7 @@ package com.spring.dineout.model;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
@@ -34,8 +36,8 @@ public class User implements UserDetails {
 	private Role_Enum role_Enum;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		 SimpleGrantedAuthority authority =  new SimpleGrantedAuthority(role_Enum.name());
+			return Collections.singleton(authority);
 	}
 	@Override
 	public String getUsername() {
