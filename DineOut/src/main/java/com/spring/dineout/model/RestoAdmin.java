@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,6 +43,7 @@ public class RestoAdmin implements UserDetails {
 	private boolean adminVerified;
 	private Instant createdDate;
 	private Instant isDeleted;
+	@Enumerated(EnumType.STRING)
 	private RoleEnum roleEnum;
 	
 	
@@ -88,28 +91,20 @@ public class RestoAdmin implements UserDetails {
 		return accountStatus;
 	}
 
-	public RestoAdmin(String hotelName, String ownerName, String email, String contactNo, String password, String city,
-			Instant openingTime, Instant closingTime, Integer totalSeats, boolean restoStatus, boolean accountStatus,
-			boolean adminVerified, Instant createdDate, Instant isDeleted, RoleEnum roleEnum) {
-		super();
-		this.hotelName = hotelName;
-		this.ownerName = ownerName;
-		this.email = email;
-		this.contactNo = contactNo;
-		this.password = password;
-		this.city = city;
-		this.openingTime = openingTime;
-		this.closingTime = closingTime;
-		this.totalSeats = totalSeats;
-		this.restoStatus = restoStatus;
-		this.accountStatus = accountStatus;
-		this.adminVerified = adminVerified;
-		this.createdDate = createdDate;
-		this.isDeleted = isDeleted;
-		this.roleEnum = roleEnum;
-	}
-
-	
+	/*
+	 * public RestoAdmin(String hotelName, String ownerName, String email, String
+	 * contactNo, String password, String city, Instant openingTime, Instant
+	 * closingTime, Integer totalSeats, boolean restoStatus, boolean accountStatus,
+	 * boolean adminVerified, Instant createdDate, Instant isDeleted, RoleEnum
+	 * roleEnum) { super(); this.hotelName = hotelName; this.ownerName = ownerName;
+	 * this.email = email; this.contactNo = contactNo; this.password = password;
+	 * this.city = city; this.openingTime = openingTime; this.closingTime =
+	 * closingTime; this.totalSeats = totalSeats; this.restoStatus = restoStatus;
+	 * this.accountStatus = accountStatus; this.adminVerified = adminVerified;
+	 * this.createdDate = createdDate; this.isDeleted = isDeleted; this.roleEnum =
+	 * roleEnum; }
+	 * 
+	 */
 	
 	
 }
