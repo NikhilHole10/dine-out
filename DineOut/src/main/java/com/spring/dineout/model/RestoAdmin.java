@@ -25,6 +25,7 @@ public class RestoAdmin implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private Long restaurantId;
 	private String hotelName;
 	private String ownerName;

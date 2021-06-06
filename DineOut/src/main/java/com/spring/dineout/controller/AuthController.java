@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.dineout.dto.AuthenticationResponse;
+import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.service.AuthService;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -34,4 +35,11 @@ public class AuthController {
 		authService.verifyAccount(token);
 		return new ResponseEntity<>("Account activated successfully",HttpStatus.OK);
 	}
+	
+	@PostMapping("/userlogin")
+	public AuthenticationResponse userLogin(@RequestBody UserLoginRequest userLoginRequest) {
+		return authService.userLogin(userLoginRequest);
+	}
+	
+	
 }
