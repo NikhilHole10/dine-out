@@ -2,13 +2,17 @@ package com.spring.dineout.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.dineout.model.Booking;
+import com.spring.dineout.model.User;
 import com.spring.dineout.service.BookingService;
 
 import lombok.AllArgsConstructor;
@@ -21,9 +25,11 @@ public class BookingController {
 	private final BookingService bookingService;
 	
 	@GetMapping("/viewbookings/{userid}")
-	public Booking getAllBookings(@PathVariable Long userid) {
+	@PreAuthorize("hasAuthority('USER')")
+	public void getAllBookings(@PathVariable Long userid) {
 		
-		return bookingService.findAllBookingsById(userid);
+		System.out.println(SecurityContextHolder.getContext().getAuthentication()); 
+		
 		
 	}
 }
