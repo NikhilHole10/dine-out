@@ -25,10 +25,10 @@ public class Booking {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long bookingId;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name ="userId",referencedColumnName = "userId")
 	private User user;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "restaurantId",referencedColumnName = "restaurantId")
 	private RestoAdmin restoAdmin;
 	private String bookedSeats;
