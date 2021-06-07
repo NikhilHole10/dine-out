@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.dineout.dto.AuthenticationResponse;
+import com.spring.dineout.dto.RefreshTokenRequest;
 import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.service.AuthService;
+import com.spring.dineout.service.RefreshTokenService;
 
 import lombok.AllArgsConstructor;
 
@@ -23,7 +25,7 @@ import lombok.AllArgsConstructor;
 public class AuthController {
 	
 	private final AuthService authService;
-	
+	private final RefreshTokenService refreshTokenService;
 	@PostMapping("/usersignup")
 	public ResponseEntity<String> signup(@RequestBody UserRegisterRequest userRegisterRequest) {
 		authService.signupUser(userRegisterRequest);
@@ -41,5 +43,15 @@ public class AuthController {
 		return authService.userLogin(userLoginRequest);
 	}
 	
+	@PostMapping("/refresh/token")
+	public AuthenticationResponse refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+		return authService.refreshToken(refreshTokenRequest);
+	}
+	
+	@PostMapping("/logout")
+	public  ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest){
+		refreshTokenService.deleteByRefreshToken(refreshTokenRequest.getRefreshToken());
+		return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully");
+	}
 	
 }
