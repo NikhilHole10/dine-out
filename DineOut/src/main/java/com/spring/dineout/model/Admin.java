@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +31,7 @@ public class Admin implements UserDetails{
 	private String 	userName;
 	private String password;
 	private Instant createdDate;
+	@Enumerated(EnumType.STRING)
 	private RoleEnum roleEnum;
 	
 	
@@ -74,4 +77,13 @@ public class Admin implements UserDetails{
 		return true;
 	}
 
+	public Admin(String userName, String password, Instant createdDate, String roleEnum) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.createdDate = createdDate;
+		this.roleEnum =  RoleEnum.valueOf(roleEnum);
+	}
+	
+	
 }

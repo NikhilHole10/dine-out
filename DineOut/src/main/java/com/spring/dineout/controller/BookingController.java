@@ -10,9 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.dineout.dto.BookingRequest;
 import com.spring.dineout.model.Booking;
 import com.spring.dineout.model.User;
 import com.spring.dineout.service.BookingService;
@@ -33,5 +36,17 @@ public class BookingController {
 	public ResponseEntity<Booking> getAllBookings(@PathVariable Long userId) {
 		System.out.println(bookingService.findAllBookingsById(userId));
 		return status(HttpStatus.OK).body(bookingService.findAllBookingsById(userId));
+	}
+	
+	@PostMapping("/bookSeats")
+	@PreAuthorize("hasAuthority('USER')")
+	public void bookSeats(@RequestBody BookingRequest bookingRequest) {
+		bookingService.bookSeats(bookingRequest);
+	}
+	
+	@GetMapping("/pendingApprovals")
+	@PreAuthorize("hasAuthority('RESTOADMIN')")
+	public List<Booking> pendingApprovals() {
+		return bookingService.getPendingApprovals();
 	}
 }
