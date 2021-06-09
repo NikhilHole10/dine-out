@@ -1,5 +1,6 @@
 package com.spring.dineout.controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.dineout.dto.AuthenticationResponse;
 import com.spring.dineout.dto.RefreshTokenRequest;
+import com.spring.dineout.dto.RestoAdminLoginRequest;
+import com.spring.dineout.dto.RestoAdminRegisterRequest;
 import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.service.AuthService;
@@ -26,6 +29,7 @@ public class AuthController {
 	
 	private final AuthService authService;
 	private final RefreshTokenService refreshTokenService;
+	
 	@PostMapping("/usersignup")
 	public ResponseEntity<String> signup(@RequestBody UserRegisterRequest userRegisterRequest) {
 		authService.signupUser(userRegisterRequest);
@@ -52,6 +56,18 @@ public class AuthController {
 	public  ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest){
 		refreshTokenService.deleteByRefreshToken(refreshTokenRequest.getRefreshToken());
 		return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully");
+	}
+	
+	@PostMapping("/restoadminsignup")
+	public ResponseEntity<String> restoAdminSignup(@RequestBody RestoAdminRegisterRequest restoAdminRegisterRequest) {
+		authService.SignUpRestoAdmin(restoAdminRegisterRequest);
+		return new ResponseEntity<>("User Registration successful",HttpStatus.OK);
+	}
+	
+	
+	@PostMapping("/restoadminlogin")
+	public AuthenticationResponse restoAdminLogin(@RequestBody UserLoginRequest userLoginRequest) {
+		return authService.userLogin(userLoginRequest);
 	}
 	
 }

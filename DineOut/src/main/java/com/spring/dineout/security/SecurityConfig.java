@@ -1,6 +1,7 @@
 package com.spring.dineout.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,9 @@ import org.springframework.security.config.BeanIds;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-	private final UserDetailsService userDetailsService;	
+	@Qualifier("RESTOADMIN")
+	private final UserDetailsService userDetailsService;
+	
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override

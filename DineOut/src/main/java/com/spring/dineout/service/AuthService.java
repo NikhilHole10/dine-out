@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.spring.dineout.dto.AuthenticationResponse;
 import com.spring.dineout.dto.RefreshTokenRequest;
+import com.spring.dineout.dto.RestoAdminLoginRequest;
+import com.spring.dineout.dto.RestoAdminRegisterRequest;
 import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.exception.DineOutException;
@@ -40,6 +42,7 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
+
 	
 	@Transactional
 	public void signupUser(UserRegisterRequest  userRegisterRequest) {
@@ -75,7 +78,8 @@ public class AuthService {
 		return verificationToken;
 		
 	}
-
+	
+	
 	public void verifyAccount(String token) {
 		Optional<VerificationToken> verificationToken =  verificationTokenRepository.findByToken(token);
 		verificationToken.orElseThrow(()->new DineOutException("Token not found"));
@@ -113,7 +117,37 @@ public class AuthService {
 				.build();
 	}
 
-	
+
+	@Transactional
+	public void SignUpRestoAdmin(RestoAdminRegisterRequest  restoAdminRegisterRequest) {
+		if(userRepository.findByEmail(restoAdminRegisterRequest.getEmail()).isPresent()) {
+			throw  new DineOutException("Email "+restoAdminRegisterRequest.getEmail()+" already present");
+		}
+		
+		
+		User user = new User(
+				restoAdminRegisterRequest.getOwnerName(),
+				restoAdminRegisterRequest.getHotelName(),
+				restoAdminRegisterRequest.getEmail(),
+				restoAdminRegisterRequest.getContactNo(),
+				passwordEncoder.encode(restoAdminRegisterRequest.getPassword()),
+				restoAdminRegisterRequest.getCity(),
+				Instant.now(),
+				restoAdminRegisterRequest.getOpeningTime(),
+				restoAdminRegisterRequest.getClosingTime(),
+				restoAdminRegisterRequest.getTotalSeats(),
+				false,
+				false,
+				false,
+				"RESTOADMIN"
+				);
+		System.out.println(user);
+		userRepository.save(user);
+		String token= generateVerificationToken(user);
+		mailService.sendMail(new NotificationEmail("Please activate your account",user.getEmail(),"Thank you for signing up to Spring Reddit, " +
+                "please click on the below url to activate your account : " +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
+	}
 	
 	
 	
