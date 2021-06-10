@@ -7,13 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestoAdminRegisterRequest {
-
-	private String restoName;
-	private String ownerName;
+public class CustomerRegistrationRequest {
+	private String customerName;
 	private String contactNo;
 	private String city;
-	private String address;
-	private String MealType;
-	private boolean restoStatus;
 }

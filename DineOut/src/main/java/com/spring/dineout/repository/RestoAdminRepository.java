@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.spring.dineout.model.User;
+import com.spring.dineout.model.Restaurant;
+
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-	Optional<User> findByEmail(String email);
+public interface RestoAdminRepository extends JpaRepository<Restaurant,Long> {
+	Optional<Restaurant> findByUserId(Long UserId);
 }
-

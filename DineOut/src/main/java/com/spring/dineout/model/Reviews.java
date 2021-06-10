@@ -1,8 +1,5 @@
 package com.spring.dineout.model;
 
-import java.time.Instant;
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,20 +15,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Booking {
+public class Reviews {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long bookingId;
 	private Long restoId;
-	private Long customerId;
-	private Long slotId;
-	private int bookedSeats;
-	private String guestName;
-	private Date bookedDate;
-	private boolean bookedStatus;
-	private Instant createdDate;
-	
-	
+	private Long userId;
+	private int rating;
+	private String comment;
 	
 	
 	
