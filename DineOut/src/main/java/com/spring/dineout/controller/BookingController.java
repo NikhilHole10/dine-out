@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.dineout.dto.BookingRequest;
 import com.spring.dineout.model.Booking;
-import com.spring.dineout.model.User;
+
 import com.spring.dineout.service.BookingService;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -44,9 +44,7 @@ public class BookingController {
 		bookingService.bookSeats(bookingRequest);
 	}
 	
-	@GetMapping("/pendingApprovals")
-	@PreAuthorize("hasAuthority('RESTOADMIN')")
-	public List<Booking> pendingApprovals() {
-		return bookingService.getPendingApprovals();
-	}
+
+	
+	
 }

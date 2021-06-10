@@ -7,17 +7,14 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingRequest {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bookingId;
-	private String restaurentEmail;
-	private String bookingDate;
-	private int seats;
+
+	private Long restoId;
+	private String bookedDate;
+	private int bookedSeats;
+	private Long slotId;
 }

@@ -59,8 +59,8 @@ public class AuthController {
 	}
 	
 	@PostMapping("/restoadminsignup")
-	public ResponseEntity<String> restoAdminSignup(@RequestBody RestoAdminRegisterRequest restoAdminRegisterRequest) {
-		authService.SignUpRestoAdmin(restoAdminRegisterRequest);
+	public ResponseEntity<String> restoAdminSignup(@RequestBody UserRegisterRequest userRegisterRequest) {
+		authService.SignUpRestoAdmin(userRegisterRequest);
 		return new ResponseEntity<>("User Registration successful",HttpStatus.OK);
 	}
 	

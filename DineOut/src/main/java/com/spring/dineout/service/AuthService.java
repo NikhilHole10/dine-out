@@ -22,6 +22,7 @@ import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.exception.DineOutException;
 import com.spring.dineout.model.NotificationEmail;
+import com.spring.dineout.model.RoleEnum;
 import com.spring.dineout.model.User;
 import com.spring.dineout.model.VerificationToken;
 import com.spring.dineout.repository.UserRepository;
@@ -42,6 +43,7 @@ public class AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
+	private final CustomerService customerService;
 
 	
 	@Transactional
@@ -51,17 +53,14 @@ public class AuthService {
 		}
 		
 		
-		User user = new User(
-				userRegisterRequest.getName(),
-				userRegisterRequest.getEmail(),
-				userRegisterRequest.getContact_no(),
-				passwordEncoder.encode(userRegisterRequest.getPassword()),
-				userRegisterRequest.getCity(),
-				Instant.now(),
-				false,
-				false,
-				"USER"
-				);
+		User user = new User();
+		user.setEmail(userRegisterRequest.getEmail());
+		user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
+		user.setCreatedDate(Instant.now());
+		user.setAccountStatus(false);
+		user.setDeleted(false);
+		user.setRoleEnum(RoleEnum.valueOf("USER"));
+		
 		userRepository.save(user);
 		String token= generateVerificationToken(user);
 		mailService.sendMail(new NotificationEmail("Please activate your account",user.getEmail(),"Thank you for signing up to Spring Reddit, " +
@@ -90,7 +89,7 @@ public class AuthService {
 	private void fetchUserAndEnable(VerificationToken verificationToken) {
 		String username = verificationToken.getUser().getEmail();
 		User user = userRepository.findByEmail(username).orElseThrow(()->new DineOutException("User with username"+username+ " does not exist"));
-		user.setAccount_status(true);
+		user.setAccountStatus(true);
 		userRepository.save(user);
 	}
 
@@ -103,6 +102,7 @@ public class AuthService {
 				.refreshToken(refreshTokenService.generateRefreshToken().getToken())
 				.expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
 				.username(loginRequest.getEmail())
+				.updatedDetails(customerService.findByCustomerName(loginRequest.getEmail()))
 				.build();
 	}
 
@@ -119,29 +119,19 @@ public class AuthService {
 
 
 	@Transactional
-	public void SignUpRestoAdmin(RestoAdminRegisterRequest  restoAdminRegisterRequest) {
-		if(userRepository.findByEmail(restoAdminRegisterRequest.getEmail()).isPresent()) {
-			throw  new DineOutException("Email "+restoAdminRegisterRequest.getEmail()+" already present");
+	public void SignUpRestoAdmin(UserRegisterRequest  userRegisterRequest) {
+		if(userRepository.findByEmail(userRegisterRequest.getEmail()).isPresent()) {
+			throw  new DineOutException("Email "+userRegisterRequest.getEmail()+" already present");
 		}
 		
 		
-		User user = new User(
-				restoAdminRegisterRequest.getOwnerName(),
-				restoAdminRegisterRequest.getHotelName(),
-				restoAdminRegisterRequest.getEmail(),
-				restoAdminRegisterRequest.getContactNo(),
-				passwordEncoder.encode(restoAdminRegisterRequest.getPassword()),
-				restoAdminRegisterRequest.getCity(),
-				Instant.now(),
-				restoAdminRegisterRequest.getOpeningTime(),
-				restoAdminRegisterRequest.getClosingTime(),
-				restoAdminRegisterRequest.getTotalSeats(),
-				false,
-				false,
-				false,
-				"RESTOADMIN"
-				);
-		System.out.println(user);
+		User user = new User();
+		user.setEmail(userRegisterRequest.getEmail());
+		user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
+		user.setCreatedDate(Instant.now());
+		user.setAccountStatus(false);
+		user.setDeleted(false);
+		user.setRoleEnum(RoleEnum.valueOf("RESTOADMIN"));
 		userRepository.save(user);
 		String token= generateVerificationToken(user);
 		mailService.sendMail(new NotificationEmail("Please activate your account",user.getEmail(),"Thank you for signing up to Spring Reddit, " +

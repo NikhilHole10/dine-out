@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
+	
 	private final UserRepository userRepository;
 	@Override
     @Transactional(readOnly = true)
@@ -32,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return new org.springframework.security
                 .core.userdetails.User(user.getEmail(), user.getPassword(),
-                user.isAccount_status(), true, true,
+                user.isAccountStatus(), true, true,
                 true, getAuthorities(user.getRoleEnum().toString()) );
     }
 
