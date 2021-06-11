@@ -15,5 +15,4 @@ public class RestoAdminRegisterRequest {
 	private String city;
 	private String address;
 	private String MealType;
-	private boolean restoStatus;
 }

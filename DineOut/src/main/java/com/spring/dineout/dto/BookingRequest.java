@@ -17,4 +17,5 @@ public class BookingRequest {
 	private String bookedDate;
 	private int bookedSeats;
 	private Long slotId;
+	private String guestName;
 }
