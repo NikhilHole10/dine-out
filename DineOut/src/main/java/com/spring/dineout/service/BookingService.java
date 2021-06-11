@@ -38,7 +38,7 @@ public void bookSeats(BookingRequest bookingRequest) {
 		booking.setCustomerId(customerService.getLoggedCustomer().getUserId());
 		booking.setSlotId(bookingRequest.getSlotId());
 		booking.setBookedSeats(bookingRequest.getBookedSeats());
-		booking.setGuestName(booking.getGuestName());
+		booking.setGuestName(bookingRequest.getGuestName());
 		booking.setBookedDate(bookedDate);
 		booking.setBookedStatus(false);
 		booking.setCreatedDate(Instant.now());

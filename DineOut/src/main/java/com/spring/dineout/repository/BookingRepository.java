@@ -18,8 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long>{
 	 @Query("SELECT SUM(bookedSeats) FROM Booking  WHERE restoId = :restoId AND  bookedDate = :bookedDate AND status=1")
 	    public Optional<Integer> findAvailability(@Param("restoId") long restoId,@Param("bookedDate") Date	 bookedDate);
 
-	 @Query(value="SELECT * FROM booking  WHERE resto_id = :restoId AND status=0",nativeQuery=true)
+	 @Query(value="SELECT * FROM booking  WHERE resto_id = :restoId AND booked_status=0",nativeQuery=true)
 	    public Optional<List<Booking>> getPendingApproval(@Param("restoId") long restoId);
-
 
 }

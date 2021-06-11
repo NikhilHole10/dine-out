@@ -1,5 +1,8 @@
 package com.spring.dineout.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,16 +10,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.spring.dineout.dto.CustomerRegistrationRequest;
 import com.spring.dineout.dto.RestoAdminRegisterRequest;
+import com.spring.dineout.dto.SlotRegisterRequest;
 import com.spring.dineout.exception.DineOutException;
 import com.spring.dineout.model.Booking;
-import com.spring.dineout.model.Customer;
 import com.spring.dineout.model.Restaurant;
+import com.spring.dineout.model.Slots;
 import com.spring.dineout.model.User;
 import com.spring.dineout.repository.BookingRepository;
-import com.spring.dineout.repository.CustomerRepository;
 import com.spring.dineout.repository.RestoAdminRepository;
+import com.spring.dineout.repository.SlotRepository;
 import com.spring.dineout.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -28,13 +31,16 @@ public class RestaurantAdminService {
 	private final BookingRepository bookingRepository;
 	private final UserRepository userRepository; 
 	private final RestoAdminRepository restoAdminRepository;
-	public List<Booking> getPendingApprovals() {
+	private final SlotRepository slotRepository;
+	
+	public Restaurant getLoggedRestoAdmin(){
 		UserDetails loggedUser= (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String loggedUserUserName = loggedUser.getUsername();
-		User user = userRepository.findByEmail(loggedUserUserName)
-				.orElseThrow(()->new DineOutException("logged user "+loggedUserUserName+" not found"));
-		
-		Optional<List<Booking>> approvals= bookingRepository.getPendingApproval(user.getUserId());
+		Optional<User> user =  userRepository.findByEmail(loggedUser.getUsername());
+		return restoAdminRepository.findByUserId(user.get().getUserId()).get();
+	}
+	
+	public List<Booking> getPendingApprovals() {
+		Optional<List<Booking>> approvals= bookingRepository.getPendingApproval(getLoggedRestoAdmin().getUserId());
 		
 		return approvals.get();
 	}
@@ -50,14 +56,7 @@ public class RestaurantAdminService {
 		}
 		return false;
 	}
-	/*
-	 * public void approveOrder(Long bookingid) { Optional<Booking> booking =
-	 * bookingRepository.findById(bookingid); if(booking.isPresent()) {
-	 * Optional<User> resto = userRepository.findById(booking.get().getRestoId());
-	 * if(resto.get().getTotalSeats()-booking.get().getBookedSeats()>=0) {
-	 * booking.get().setStatus(true); bookingRepository.save(booking.get());; }
-	 * }else { throw new DineOutException("No booking found"); } return; }
-	 */
+	
 
 	public void saveRestaurantDetails(RestoAdminRegisterRequest restoAdminRegisterRequest) {
 
@@ -80,11 +79,44 @@ public class RestaurantAdminService {
 		restaurant.setOwnerName(restoAdminRegisterRequest.getOwnerName());
 		restaurant.setContactNo(restoAdminRegisterRequest.getContactNo());
 		restaurant.setAddress(restoAdminRegisterRequest.getAddress());
-		restaurant.setAddress(restoAdminRegisterRequest.getAddress());
+		restaurant.setCity(restoAdminRegisterRequest.getCity());
 		restaurant.setMealType(restoAdminRegisterRequest.getMealType());
 		restaurant.setRestoStatus(false);
 		restoAdminRepository.save(restaurant);
 		
+		}
+	}
+
+	public void addSlots(List<SlotRegisterRequest> listOfSlots) {
+		for(int i=0;i<listOfSlots.size();i++) {
+			Slots s = new Slots();
+			Date bookedDate = null;
+			try {
+				bookedDate = new SimpleDateFormat("dd/MM/yyyy").parse(listOfSlots.get(i).getSlotDate());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			s.setRestoId(listOfSlots.get(i).getRestoid());
+			s.setSlotDate(bookedDate);
+			s.setTime(listOfSlots.get(i).getTime());
+			s.setCapacity(listOfSlots.get(i).getCapacity());
+			slotRepository.save(s);
+			}
+		
+	}
+
+	public void approveOrder(Long bookingid) {
+		Optional<Booking> booking =  bookingRepository.findByBookingId(bookingid);
+		Optional<Slots> slot = slotRepository.findBySlotId(booking.get().getSlotId());
+		if(slot.get().getCapacity()<=booking.get().getBookedSeats()) {
+			throw new DineOutException("Bookgin not confirmed");
+		}
+		else {
+			slot.get().setCapacity(slot.get().getCapacity()-booking.get().getBookedSeats());
+			booking.get().setBookedStatus(true);	
+			bookingRepository.save(booking.get());
+			slotRepository.save(slot.get());
 		}
 	}
 }

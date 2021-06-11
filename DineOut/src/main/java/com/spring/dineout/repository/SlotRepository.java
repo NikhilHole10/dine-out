@@ -10,4 +10,5 @@ import com.spring.dineout.model.Slots;
 @Repository
 public interface SlotRepository extends JpaRepository<Slots, Long> {
 	Optional<Slots> findBySlotId(Long slotId);
+	
 }
