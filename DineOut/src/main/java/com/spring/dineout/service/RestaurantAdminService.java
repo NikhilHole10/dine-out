@@ -50,14 +50,7 @@ public class RestaurantAdminService {
 		}
 		return false;
 	}
-	/*
-	 * public void approveOrder(Long bookingid) { Optional<Booking> booking =
-	 * bookingRepository.findById(bookingid); if(booking.isPresent()) {
-	 * Optional<User> resto = userRepository.findById(booking.get().getRestoId());
-	 * if(resto.get().getTotalSeats()-booking.get().getBookedSeats()>=0) {
-	 * booking.get().setStatus(true); bookingRepository.save(booking.get());; }
-	 * }else { throw new DineOutException("No booking found"); } return; }
-	 */
+
 
 	public void saveRestaurantDetails(RestoAdminRegisterRequest restoAdminRegisterRequest) {
 
