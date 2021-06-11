@@ -13,37 +13,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.dineout.dto.RestoAdminRegisterRequest;
+import com.spring.dineout.dto.SlotRegisterRequest;
 import com.spring.dineout.model.Booking;
 import com.spring.dineout.service.RestaurantAdminService;
 import lombok.AllArgsConstructor;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/restaurant")
 public class RestoAdminController {
-	
-	private final RestaurantAdminService restaurantAdminService ;
-	
-	
+
+	private final RestaurantAdminService restaurantAdminService;
+
 	@GetMapping("/pendingapprovals")
 	@PreAuthorize("hasAuthority('RESTOADMIN')")
 	public List<Booking> pendingApprovals() {
 		return restaurantAdminService.getPendingApprovals();
 	}
-	
+
 	@PostMapping("/saverestaurant")
 	@PreAuthorize("hasAuthority('RESTOADMIN')")
 	public void saveRestaurantDetails(@RequestBody RestoAdminRegisterRequest restoAdminRegisterRequest) {
 		restaurantAdminService.saveRestaurantDetails(restoAdminRegisterRequest);
 	}
-	/*
-	 * @GetMapping("/approveorder/{bookingid}")
-	 * 
-	 * @PreAuthorize("hasAuthority('RESTOADMIN')") public ResponseEntity<Void>
-	 * approveOrder(@PathVariable Long bookingid) {
-	 * restaurantAdminService.approveOrder(bookingid); return new
-	 * ResponseEntity<>(HttpStatus.OK); }
-	 */
+
 	
+	  
+	  @GetMapping("/approveorder/{bookingid}")
+	  @PreAuthorize("hasAuthority('RESTOADMIN')") 
+	  public ResponseEntity<Void> approveOrder(@PathVariable Long bookingid) {
+		  	restaurantAdminService.approveOrder(bookingid);
+		  	return new ResponseEntity<>(HttpStatus.OK); 
+	  }
+	 
+	@PostMapping("/addslots")
+	@PreAuthorize("hasAuthority('RESTOADMIN')")
+	public void addSlots(@RequestBody List<SlotRegisterRequest> listOfSlots) {
+		restaurantAdminService.addSlots(listOfSlots);
+	}
+
 }

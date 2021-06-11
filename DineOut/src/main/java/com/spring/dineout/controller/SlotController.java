@@ -26,10 +26,5 @@ public class SlotController {
 	public void createSlots(@RequestBody SlotWrapper slotList) {
 		//System.out.println(slotList);
 		slotService.addAllSlots(slotList);
-		List<SlotsRequest> listSlot = slotList.getSlotList();
-		System.out.println(listSlot);
-		for(int i =0 ;i<listSlot.size();i++) {
-			System.out.println(listSlot.get(i));
-		}
 	}
 }
