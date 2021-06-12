@@ -42,4 +42,6 @@ public class CustomerController {
 	public List<Restaurant> showRestaurant(@PathVariable String city ,@PathVariable String type,@PathVariable int page) {
 		return customerService.showRestaurant(city,type,page);
 	}
+	
+	
 }
