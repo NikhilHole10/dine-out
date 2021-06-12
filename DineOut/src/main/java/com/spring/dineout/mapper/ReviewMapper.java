@@ -11,7 +11,6 @@ import com.spring.dineout.model.Restaurant;
 import com.spring.dineout.model.Review;
 import com.spring.dineout.model.User;
 
-
 @Mapper(componentModel = "spring")
 public abstract class ReviewMapper {
 
