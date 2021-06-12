@@ -21,11 +21,13 @@ import com.spring.dineout.dto.RestoAdminRegisterRequest;
 import com.spring.dineout.dto.UserLoginRequest;
 import com.spring.dineout.dto.UserRegisterRequest;
 import com.spring.dineout.exception.DineOutException;
+import com.spring.dineout.model.Customer;
 import com.spring.dineout.model.NotificationEmail;
 import com.spring.dineout.model.Restaurant;
 import com.spring.dineout.model.RoleEnum;
 import com.spring.dineout.model.User;
 import com.spring.dineout.model.VerificationToken;
+import com.spring.dineout.repository.CustomerRepository;
 import com.spring.dineout.repository.RestoAdminRepository;
 import com.spring.dineout.repository.UserRepository;
 import com.spring.dineout.repository.VerificationTokenRepository;
@@ -47,6 +49,7 @@ public class AuthService {
 	private final JwtProvider jwtProvider;
 	private final RefreshTokenService refreshTokenService;
 	private final CustomerService customerService;
+	private final CustomerRepository customerRepository;
 
 
 	@Transactional
@@ -93,6 +96,14 @@ public class AuthService {
 				getContext().getAuthentication().getPrincipal();
 		return userRepository.findByEmail(principal.getUsername())
 				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+	}
+	@Transactional(readOnly = true)
+	public Customer getCurrentCustomer() {
+		org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.
+				getContext().getAuthentication().getPrincipal();
+		User user = userRepository.findByEmail(principal.getUsername())
+				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+		return customerRepository.findByUserId(user.getUserId()).orElseThrow(()-> new DineOutException("No customer"));
 	}
 	@Transactional(readOnly = true)
 	public Optional<Restaurant> getCurrentRestoAdminUser() {
