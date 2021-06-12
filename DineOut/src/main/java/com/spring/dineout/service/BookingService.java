@@ -62,15 +62,17 @@ public class BookingService {
 	}
 	private void sendEmailNotificationToCustomer(Long restoId) {
 		Restaurant restaurant = restaurantRepository.findById(restoId).get();
-		String messageToCustomer = mailContentBuilder.build("Your order at "+restaurant.getRestoName()+" has been placed successfully. Order confirmation will take upto 10 mins. Thank you, Team Dineout");
-		mailService.sendMail(new NotificationEmail("Order Received",authService.getCurrentUser().getEmail(),messageToCustomer)); 
+		//String message = mailContentBuilder.build("Your order at "+restaurant.getRestoName()+" has been placed successfully. Order confirmation will take upto 10 mins. Thank you, Team Dineout");
+		
+		mailService.sendMail(new NotificationEmail("Order Received",authService.getCurrentUser().getEmail(),"Your order at "+restaurant.getRestoName()+" has been placed successfully. Order confirmation will take upto 10 mins. Thank you, Team Dineout")); 
 	}
 	private void sendEmailNotificationToRestaurant(BookingRequest bookingRequest) {
 		Customer customer = customerRepository.findByUserId(authService.getCurrentUser().getUserId()).get();
 		Restaurant restaurant = restaurantRepository.findByRestoId(bookingRequest.getRestoId()).get();
 		User user = userRepository.findById(restaurant.getUserId()).get();
-		String messageToRestaurant = mailContentBuilder.build("New Order has been placed by "+customer.getCustomerName()+" on "+bookingRequest.getBookedDate()+". Please review the order. Thank You,Team Dineout");
-		mailService.sendMail(new NotificationEmail("Order Received",user.getEmail(),messageToRestaurant)); 
+		//String message = mailContentBuilder.build();
+		
+		mailService.sendMail(new NotificationEmail("New Order Received",user.getEmail(),"New Order has been placed by "+customer.getCustomerName()+" on "+bookingRequest.getBookedDate()+". Please review the order. Thank You,Team Dineout")); 
 	}
 
 }
