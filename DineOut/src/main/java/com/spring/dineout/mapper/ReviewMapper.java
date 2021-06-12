@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.spring.dineout.dto.ReviewRequest;
+import com.spring.dineout.dto.ReviewResponse;
 import com.spring.dineout.model.Customer;
 import com.spring.dineout.model.Restaurant;
 import com.spring.dineout.model.Review;
@@ -19,4 +20,7 @@ public interface ReviewMapper {
     @Mapping(target = "restaurant", source = "restaurant")
     @Mapping(target = "customer", source = "customer")
 	Review map(ReviewRequest reviewRequest,Customer customer,Restaurant restaurant);
+
+	@Mapping(target = "userName", expression ="java(review.getCustomer().getCustomerName())")
+	ReviewResponse mapReviewEntityToResponse(Review review);
 }
