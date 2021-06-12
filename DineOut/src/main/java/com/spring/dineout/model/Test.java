@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class Test implements UserDetails{
+	private String test;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
