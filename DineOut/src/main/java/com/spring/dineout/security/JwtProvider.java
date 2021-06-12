@@ -13,8 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.sql.Date;
+
 import java.time.Instant;
+import java.util.Date;
 
 import static io.jsonwebtoken.Jwts.parserBuilder;
 import static java.util.Date.from;

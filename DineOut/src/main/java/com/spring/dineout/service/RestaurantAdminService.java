@@ -56,7 +56,7 @@ public class RestaurantAdminService {
 		}
 		return false;
 	}
-	
+
 
 	public void saveRestaurantDetails(RestoAdminRegisterRequest restoAdminRegisterRequest) {
 
@@ -99,7 +99,7 @@ public class RestaurantAdminService {
 			}
 			s.setRestoId(listOfSlots.get(i).getRestoid());
 			s.setSlotDate(bookedDate);
-			s.setTime(listOfSlots.get(i).getTime());
+			s.setTimeSlot(listOfSlots.get(i).getTime());
 			s.setCapacity(listOfSlots.get(i).getCapacity());
 			slotRepository.save(s);
 			}

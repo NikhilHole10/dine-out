@@ -21,7 +21,7 @@ public class Slots {
 	private Long slotId;
 	private Long restoId;
 	private Date slotDate;
-	private String time;
+	private String timeSlot;
 	private int capacity;
 	
 }
