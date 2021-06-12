@@ -17,4 +17,5 @@ public class ReviewResponse {
 	private int ratings;
 	private Instant createdDate;
 	private String userName;
+	private String duration;
 }

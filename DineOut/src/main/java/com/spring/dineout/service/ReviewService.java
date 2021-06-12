@@ -29,8 +29,8 @@ public class ReviewService {
 
 	public void createReview(ReviewRequest reviewRequest) {
 		Restaurant restaurant = restaurantRepository.findById(reviewRequest.getRestoId()).orElseThrow(()-> new DineOutException("Restaurant does not exists"));
-		Review review = reviewMapper.map(reviewRequest,authService.getCurrentCustomer(), restaurant);
-		reviewRepository.save(review);
+		
+		reviewRepository.save( reviewMapper.map(reviewRequest,authService.getCurrentCustomer(), restaurant));
 	}
 
 	public List<ReviewResponse> getReviewsByRestaurant(Long restoId) {
