@@ -68,7 +68,28 @@ public class CustomerService {
 		int size=3;
 		int lower=((page-1)*size)+1;
 		int upper=((page)*size);
-		Optional<List<Restaurant>> listOfRestaurant =restoAdminRepository.showRestaurantsWithPaging(city, lower, upper);
+		List<Restaurant> restolist=null;
+		System.out.println(type);
+		if(type.toLowerCase().compareTo("new")==0) {
+			System.out.println("new");
+			restolist= showRestaurantByNew(city, type,lower,upper);
+		}
+		else if(type.toLowerCase().compareTo("popularity")==0) {
+			System.out.println("populariy");
+			restolist = showRestaurantByPopularity(city, type, lower, upper);
+		}
+		
+		return restolist;
+		
+	}
+	
+	public List<Restaurant> showRestaurantByNew(String city,String type,int lower,int upper){
+		Optional<List<Restaurant>> listOfRestaurant =restoAdminRepository.showNewRestaurantsWithPaging(city, lower, upper);
+		return listOfRestaurant.get();
+	}
+	
+	public List<Restaurant> showRestaurantByPopularity(String city,String type,int lower,int upper){
+		Optional<List<Restaurant>> listOfRestaurant =restoAdminRepository.showPopularRestaurantsWithPaging(city, lower, upper);
 		return listOfRestaurant.get();
 	}
 }
